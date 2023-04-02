@@ -5,7 +5,7 @@ namespace PracownicyMVP.View
 {
     public partial class Form1 : Form
     {
-        PracownikList pracownikList = new PracownikList();
+        public PracownikList pracownikList = new PracownikList();
         public Form1()
         {
             InitializeComponent();
@@ -16,85 +16,73 @@ namespace PracownicyMVP.View
         public event Action AddEmployee;
         #endregion
 
-
-
-        private void button1_Click(object sender, EventArgs e)
+        public event Action AddPerson;
+        public event Action SerializeList;
+        public event Action DeserializeList;
+        public event Action<int> SelectEmployee;
+        public ListBox.ObjectCollection DisplayEmployees
         {
-            if (String.IsNullOrEmpty(textBox1.Text) || String.IsNullOrEmpty(textBox2.Text) || numericUpDown1.Value <= 0 || String.IsNullOrEmpty(comboBox1.Text))
+            get
             {
-                MessageBox.Show("Puste pola");
-            }
-            else
-            {
-                string radioValue = "";
-                if (radioButton1.Checked)
-                {
-                    radioValue = radioButton1.Text;
-                }
-                if (radioButton2.Checked)
-                {
-                    radioValue = radioButton2.Text;
-                }
-                if (radioButton3.Checked)
-                {
-                    radioValue = radioButton3.Text;
-                }
-                Pracownik pracownik = new Pracownik(textBox1.Text, textBox2.Text, dateTimePicker1.Value, numericUpDown1.Value, comboBox1.Text, radioValue);
-                pracownikList.list.Add(pracownik);
-                listBox1.Items.Add(pracownik.ToString());
+                return listBox1.Items;
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        void selectEmployee(object sender,EventArgs e){
+            var listbox = sender as ListBox;
+            int index = listbox.SelectedIndex;
+            SelectEmployee?.Invoke(index);
+        }
+        public void addToListBox(Pracownik p)
         {
-            saveFileDialog1.ShowDialog(this);
+            listBox1.Items.Add(p);
+        }
+        private void addPerson(object sender, EventArgs e)
+        {
+            AddPerson?.Invoke();
+            
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void serialize_list(object sender, EventArgs e)
         {
-            openFileDialog1.ShowDialog(this);
+            pracownikList.Serialize();
         }
 
-        private void saveFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        private void deserialize_list(object sender, EventArgs e)
         {
-            pracownikList.Serialize(saveFileDialog1.FileName);
-        }
-
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Pracownik pracownicy = pracownikList.list.ElementAt(listBox1.SelectedIndex);
-            textBox1.Text = pracownicy.Imie;
-            textBox2.Text = pracownicy.Nazwisko;
-            dateTimePicker1.Value = pracownicy.Data_urodzenia;
-            numericUpDown1.Value = pracownicy.Pensja;
-            comboBox1.Text = pracownicy.Stanowisko;
-            if (radioButton1.Text == pracownicy.Umowa)
+            listBox1.Items.Clear();
+            pracownikList.Deserialize();
+            foreach (var x in pracownikList.list)
             {
-                radioButton1.Checked = true;6
+                listBox1.Items.Add(x);
+            }
+        }
+        public void setFormValues(string name, string surname, DateTime date, decimal salary, int position, string umowa)
+        {
+            textBox1.Text = name;
+            textBox2.Text = surname;
+            dateTimePicker1.Value = date;
+            numericUpDown1.Value = salary;
+            comboBox1.SelectedIndex = position;
+            if (radioButton1.Text == umowa)
+            {
+                radioButton1.Checked = true;
                 radioButton2.Checked = false;
                 radioButton3.Checked = false;
             }
-            if (radioButton2.Text == pracownicy.Umowa)
+            if (radioButton2.Text == umowa)
             {
                 radioButton2.Checked = true;
                 radioButton3.Checked = false;
                 radioButton1.Checked = false;
             }
-            if (radioButton3.Text == pracownicy.Umowa)
-            {
+            if (radioButton3.Text == umowa)
+            { 
                 radioButton3.Checked = true;
                 radioButton1.Checked = false;
                 radioButton2.Checked = false;
             }
         }
-
-        private void openFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            listBox1.Items.Clear();
-            pracownikList.Deserialize(openFileDialog1.FileName);
-            foreach(var x in  pracownikList.list) {
-            listBox1.Items.Add(x);
-            }
-        }
+       
     }
 }

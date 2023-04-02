@@ -153,7 +153,7 @@
             button1.TabIndex = 1;
             button1.Text = "Dodaj";
             button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            button1.Click += new EventHandler(addPerson);
             // 
             // label3
             // 
@@ -240,7 +240,7 @@
             button3.TabIndex = 3;
             button3.Text = "Wczytaj";
             button3.UseVisualStyleBackColor = true;
-            button3.Click += button3_Click;
+            button3.Click += new EventHandler(deserialize_list);
             // 
             // button2
             // 
@@ -250,7 +250,7 @@
             button2.TabIndex = 2;
             button2.Text = "Zapisz";
             button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
+            button2.Click += new EventHandler(serialize_list);
             // 
             // listBox1
             // 
@@ -260,18 +260,7 @@
             listBox1.Name = "listBox1";
             listBox1.Size = new Size(413, 289);
             listBox1.TabIndex = 4;
-            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged;
-            // 
-            // saveFileDialog1
-            // 
-            saveFileDialog1.FileName = "pracownicy.xml";
-            saveFileDialog1.Filter = "Plik XML|*.xml|Wszystkie pliki|*.*";
-            saveFileDialog1.FileOk += saveFileDialog1_FileOk;
-            // 
-            // openFileDialog1
-            // 
-            openFileDialog1.FileName = "openFileDialog1";
-            openFileDialog1.FileOk += openFileDialog1_FileOk;
+            listBox1.SelectedIndexChanged += new System.EventHandler(this.selectEmployee);
             // 
             // Form1
             // 
@@ -294,16 +283,16 @@
 
         private Panel panel1;
         private Button button3;
-        private RadioButton radioButton3;
+        public RadioButton radioButton3;
         private Button button2;
-        private RadioButton radioButton1;
+        public RadioButton radioButton1;
         private Button button1;
-        private RadioButton radioButton2;
-        private ComboBox comboBox1;
-        private NumericUpDown numericUpDown1;
-        private DateTimePicker dateTimePicker1;
-        private TextBox textBox1;
-        private TextBox textBox2;
+        public RadioButton radioButton2;
+        public ComboBox comboBox1;
+        public NumericUpDown numericUpDown1;
+        public DateTimePicker dateTimePicker1;
+        public TextBox textBox1;
+        public TextBox textBox2;
         private Label label6;
         private Label label7;
         private Label label5;
